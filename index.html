@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aptitude Ace</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+    display:flex;
+    min-height:100vh;
+    background:#f8fafc;
+    color:#111827;
+    transition:0.3s;
+}
+
+body.dark{
+    background:#0f172a;
+    color:#e5e7eb;
+}
+
+/* Sidebar */
+.sidebar{
+    width:260px;
+    background:#111827;
+    color:white;
+    padding:30px 20px;
+}
+
+.sidebar h2{
+    margin-bottom:25px;
+    font-weight:600;
+}
+
+.sidebar button{
+    width:100%;
+    padding:10px;
+    margin-bottom:10px;
+    background:#1f2937;
+    border:none;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    text-align:left;
+}
+
+.sidebar button:hover{
+    background:#374151;
+}
+
+/* Main */
+.main{
+    flex:1;
+    padding:40px;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.search input{
+    padding:8px 12px;
+    border-radius:8px;
+    border:1px solid #d1d5db;
+    width:240px;
+}
+
+.progress-box{
+    margin-bottom:25px;
+}
+
+.progress-bar{
+    height:10px;
+    background:#e5e7eb;
+    border-radius:8px;
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    width:0%;
+    background:#6366f1;
+    transition:0.3s;
+}
+
+.topic{
+    background:white;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:15px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.05);
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.topic:hover{
+    transform:translateY(-3px);
+}
+
+body.dark .topic{
+    background:#1e293b;
+}
+
+.topic-content{
+    display:none;
+    margin-top:10px;
+    font-size:14px;
+    line-height:1.6;
+}
+
+.complete-btn{
+    margin-top:10px;
+    padding:6px 10px;
+    border:none;
+    background:#6366f1;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.toggle-mode{
+    padding:12px 24px;
+    background:#111827;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+body.dark .toggle-mode{
+    background:white;
+    color:black;
+}
+
+@media(max-width:900px){
+    body{
+        flex-direction:column;
+    }
+    .sidebar{
+        width:100%;
+        display:flex;
+        justify-content:space-around;
+    }
+    .main{
+        padding:20px;
+    }
+}
+footer a{
+    transition:0.3s;
+}
+
+footer a:hover{
+    text-decoration:underline;
+}
+/* Sidebar layout fix */
+.sidebar{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+/* Sidebar footer improved */
+
+.sidebar-footer{
+    margin-top:40px;
+    padding-top:25px;
+    border-top:1px solid rgba(255,255,255,0.15);
+    text-align:left;
+}
+
+/* Make author text slightly bigger */
+.author{
+    font-size:15px;
+    font-weight:500;
+    margin-bottom:10px;
+    opacity:0.9;
+}
+
+/* Make GitHub link pop */
+.github-link{
+    display:inline-block;
+    font-size:16px;
+    font-weight:600;
+    color:#a5b4fc;
+    text-decoration:none;
+    transition:0.3s;
+}
+
+.github-link:hover{
+    color:#ffffff;
+    transform:translateX(4px);
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="sidebar-top">
+        <h2>Categories</h2>
+        <button onclick="loadCategory('quant')">Quantitative Aptitude</button>
+        <button onclick="loadCategory('logical')">Logical Reasoning</button>
+        <button onclick="loadCategory('verbal')">Verbal Ability</button>
+    </div>
+
+    <div class="sidebar-footer">
+        <p class="author">Built by Vedhinee N M</p>
+        <a href="https://github.com/Vedhinee" target="_blank" class="github-link ">
+            View GitHub Profile →
+        </a>
+    </div>
+
+</div>
+
+
+<div class="main">
+
+    <div class="header">
+        <h1 id="categoryTitle">Quantitative Aptitude</h1>
+        <div>
+            <div class="search">
+                <input type="text" id="search" placeholder="Search topic...">
+            </div>
+            <br>
+            <button class="toggle-mode" onclick="toggleMode()">Toggle Mode</button>
+        </div>
+    </div>
+    
+
+    <div class="progress-box">
+        <p>Progress</p>
+        <br>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <br>
+        <p id="progressText">0% Completed</p>
+    </div>
+
+    <div id="topicsContainer"></div>
+
+    
+
+</div>
+
+<script>
+
+const data = {
+    quant: [
+        "Number System",
+        "Percentages",
+        "Ratio & Proportion",
+        "Time & Work",
+        "Profit & Loss",
+        "Probability"
+    ],
+    logical: [
+        "Blood Relations",
+        "Seating Arrangement",
+        "Syllogism",
+        "Coding-Decoding",
+        "Direction Sense"
+    ],
+    verbal: [
+        "Reading Comprehension",
+        "Sentence Correction",
+        "Synonyms & Antonyms",
+        "Para Jumbles",
+        "Error Detection"
+    ]
+};
+
+let currentCategory = "quant";
+
+function loadCategory(category){
+    currentCategory = category;
+
+    document.getElementById("categoryTitle").innerText =
+        category === "quant" ? "Quantitative Aptitude" :
+        category === "logical" ? "Logical Reasoning" :
+        "Verbal Ability";
+
+    const container = document.getElementById("topicsContainer");
+    container.innerHTML = "";
+
+    let saved = JSON.parse(localStorage.getItem(currentCategory)) || [];
+
+    data[category].forEach(topic => {
+
+        const isCompleted = saved.includes(topic);
+
+        const div = document.createElement("div");
+        div.className = "topic";
+
+        div.innerHTML = `
+            <h3>${topic}</h3>
+            <div class="topic-content">
+                <button class="complete-btn">
+                    ${isCompleted ? "Unmark" : "Mark as Complete"}
+                </button>
+            </div>
+        `;
+
+        div.onclick = function(){
+            const content = this.querySelector(".topic-content");
+            content.style.display =
+                content.style.display === "block" ? "none" : "block";
+        };
+
+        const button = div.querySelector(".complete-btn");
+
+        if(isCompleted){
+            button.style.background = "#10b981";
+        }
+
+        button.onclick = function(event){
+            event.stopPropagation();
+            toggleComplete(topic, button);
+        };
+
+        container.appendChild(div);
+    });
+
+    updateProgress();
+}
+
+function toggleComplete(topic, button){
+
+    let saved = JSON.parse(localStorage.getItem(currentCategory)) || [];
+
+    if(saved.includes(topic)){
+        // Unmark
+        saved = saved.filter(t => t !== topic);
+        button.innerText = "Mark as Complete";
+        button.style.background = "#6366f1";
+    }else{
+        // Mark
+        saved.push(topic);
+        button.innerText = "Unmark";
+        button.style.background = "#10b981";
+    }
+
+    localStorage.setItem(currentCategory, JSON.stringify(saved));
+    updateProgress();
+}
+
+function updateProgress(){
+    let saved = JSON.parse(localStorage.getItem(currentCategory)) || [];
+    let total = data[currentCategory].length;
+    let percent = Math.round((saved.length / total) * 100);
+
+    document.getElementById("progressFill").style.width = percent + "%";
+    document.getElementById("progressText").innerText = percent + "% Completed";
+}
+
+function toggleMode(){
+    document.body.classList.toggle("dark");
+}
+
+document.getElementById("search").addEventListener("keyup", function(){
+    let value = this.value.toLowerCase();
+    let topics = document.querySelectorAll(".topic");
+
+    topics.forEach(topic => {
+        topic.style.display =
+            topic.innerText.toLowerCase().includes(value)
+            ? "block"
+            : "none";
+    });
+});
+
+loadCategory("quant");
+
+</script>
+
+
+</body>
+
+</html>
