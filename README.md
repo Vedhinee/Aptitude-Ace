@@ -3,7 +3,7 @@
 A modern, clean, and user-friendly web application designed to help students prepare for competitive exams efficiently.
 
 🔗 **Live Demo:**  
-👉 https://YOUR_DEPLOYED_LINK_HERE
+👉 https://aptitudeace.netlify.app/
 
 ---
 
@@ -102,7 +102,7 @@ You can deploy it using:
 **Vedhinee N M**
 
 🔗 GitHub: https://github.com/Vedhinee 
-🔗 LinkedIn: (Add your LinkedIn link here)
+🔗 LinkedIn: https://www.linkedin.com/in/vedhineenm
 
 ---
 
